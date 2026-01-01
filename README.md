@@ -21,7 +21,7 @@
 اول باید کدهای پروژه رو از گیت‌هاب دانلود کنی. برای این کار، ترمینال (یا Git Bash) رو باز کن و دستور زیر رو بزن:
 
 ```bash
-git clone https://github.com/MMETehrani/cli-tetris-tui.git
+git clone https://github.com/MMETehrani/tetris-tui.git
 ```
 بعدش با دستور `cd cli-tetris-tui` وارد پوشه پروژه شو.
 
