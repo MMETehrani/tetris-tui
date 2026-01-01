@@ -1,3 +1,4 @@
+# main.py
 # این فایل نقطه شروع اصلی برنامه است.
 # کلاس اصلی اپلیکیشن (TetrisApp) و مدیریت صفحات مختلف (منو، بازی، ...) اینجا انجام می‌شه.
 
@@ -13,14 +14,14 @@ from score_manager import load_high_score  # وارد کردن تابع خوند
 
 # --- تعریف صفحه‌های مودال (پاپ‌آپ) ---
 
-# صفحه‌ای که وقتی بازی رو استوپ می‌کنیم، ظاهر می‌شه
+# صفحه‌ای که وقتی بازی رو متوقف (Pause) می‌کنیم، ظاهر می‌شه
 class PauseScreen(ModalScreen):
     def compose(self) -> ComposeResult:
         # یه کانتینر با استایل مودال که در CSS تعریف شده
         with Container(classes="modal-box"):
             yield Label("[bold #ffa500]PAUSED[/]")
-            yield Button("ادامه بازی", id="resume_btn", variant="primary")
-            yield Button("خروج از بازی", id="quit_btn", variant="error")
+            yield Button("Resume", id="resume_btn", variant="primary")
+            yield Button("Quit to Menu", id="quit_btn", variant="error")
 
     # وقتی یه دکمه فشرده می‌شه
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -35,9 +36,9 @@ class GameOverScreen(ModalScreen):
     def compose(self) -> ComposeResult:
         with Container(classes="modal-box"):
             yield Label("[bold white on red] GAME OVER [/]")
-            yield Label("\nدکمه [b]R[/b] رو بزن برای شروع مجدد", classes="dim-text")
-            yield Button("شروع مجدد", id="restart_btn", variant="warning")
-            yield Button("بازگشت به منو", id="menu_btn")
+            yield Label("\nPress [b]R[/b] to Restart", classes="dim-text")
+            yield Button("Restart", id="restart_btn", variant="warning")
+            yield Button("Menu", id="menu_btn")
 
     def on_button_pressed(self, event: Button.Pressed):
         if event.button.id == "restart_btn":
@@ -51,13 +52,13 @@ class GameOverScreen(ModalScreen):
 class GameScreen(Screen):
     # تعریف کلیدهای کنترلی بازی
     BINDINGS = [
-        Binding("left", "move_left", "چپ"),
-        Binding("right", "move_right", "راست"),
-        Binding("up", "rotate", "چرخش"),
-        Binding("down", "move_down", "سریع بیار پایین"),
-        Binding("r", "restart_game", "شروع مجدد"),
-        Binding("p", "pause_game", "توقف"),
-        Binding("escape", "back_to_menu", "منو"),
+        Binding("left", "move_left", "Left"),
+        Binding("right", "move_right", "Right"),
+        Binding("up", "rotate", "Rotate"),
+        Binding("down", "move_down", "Fast Drop"),
+        Binding("r", "restart_game", "Restart"),
+        Binding("p", "pause_game", "Pause"),
+        Binding("escape", "back_to_menu", "Menu"),
     ]
 
     # متغیری برای نگهداری بهترین رکورد در این دست از بازی
@@ -77,17 +78,17 @@ class GameScreen(Screen):
             with Vertical(id="sidebar"):
                 # پنل نمایش مهره بعدی
                 with Container(classes="info-panel"):
-                    yield Label("مهره بعدی", classes="panel-title")
+                    yield Label("NEXT PIECE", classes="panel-title")
                     yield Static("", id="next-item-box")
                 
                 # پنل نمایش امتیاز فعلی
                 with Container(classes="info-panel"):
-                    yield Label("امتیاز فعلی", classes="panel-title")
+                    yield Label("CURRENT SCORE", classes="panel-title")
                     yield Label("0", classes="score-value", id="score_lbl")
 
                 # پنل نمایش بهترین رکورد
                 with Container(classes="info-panel"):
-                    yield Label("بهترین رکورد", classes="panel-title")
+                    yield Label("BEST RECORD", classes="panel-title")
                     yield Label(str(self.best_score), classes="score-value", id="high_score_lbl")
         yield Footer()  # فوتر پایین صفحه که کلیدها رو نشون می‌ده
 
@@ -134,15 +135,15 @@ class GameScreen(Screen):
 # --- صفحه منوی اصلی ---
 class MenuScreen(Screen):
     BINDINGS = [
-        Binding("up", "focus_previous", "بالا"),
-        Binding("down", "focus_next", "پایین"),
-        Binding("enter", "select", "انتخاب"),
+        Binding("up", "focus_previous", "Previous"),
+        Binding("down", "focus_next", "Next"),
+        Binding("enter", "select", "Select"),
     ]
 
     def compose(self) -> ComposeResult:
         yield Label("TETRIS PRO", classes="menu-title")
-        yield Button("شروع بازی", id="start")
-        yield Button("خروج", id="quit")
+        yield Button("Start Game", id="start")
+        yield Button("Quit", id="quit")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "start":
@@ -154,7 +155,7 @@ class MenuScreen(Screen):
 class TetrisApp(App):
     CSS = CSS  # استایل کلی برنامه
     SCREENS = {"menu": MenuScreen}  # تعریف صفحات برنامه
-    BINDINGS = [("ctrl+c", "quit", "خروج")] # با کنترل+سی خارج شو
+    BINDINGS = [("ctrl+c", "quit", "Quit")] # با کنترل+سی خارج شو
 
     def on_mount(self) -> None:
         """وقتی برنامه شروع می‌شه، اولین صفحه رو نشون بده"""
